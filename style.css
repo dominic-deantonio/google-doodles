@@ -89,3 +89,43 @@ h1 {
     max-width: 700px;
     align-self: center;
 }
+
+.blue,
+.blue:hover {
+    background-color: blue;
+    color: white !important;
+}
+
+.red,
+.red:hover {
+    background-color: red;
+    color: white !important;
+}
+
+.green,
+.green:hover {
+    background-color: green;
+    color: white !important;
+}
+
+.yellow,
+.yellow:hover {
+    background-color: gold;
+    color: white !important;
+}
+
+.blue-letter {
+    color: blue;
+}
+
+.yellow-letter {
+    color: yellow;
+}
+
+.red-letter {
+    color: red;
+}
+
+.green-letter {
+    color: green;
+}

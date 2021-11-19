@@ -1,6 +1,7 @@
 const URL = 'https://google-doodles.herokuapp.com/doodles/year/month?hl=en';
 const GOOGLE_HANDOFF = "https://www.google.com/search?q=query";
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const colors = ['red', 'green', 'blue', 'yellow'];
 
 const loader = document.getElementById("loader");
 const dateFieldContainer = document.getElementById("date-field-container");
@@ -10,10 +11,24 @@ const dateIncrementer = document.getElementById("date-incrementer");
 const years = getYears();
 const doodleContainer = document.getElementById("doodle-container");
 const errorBox = document.getElementById("error-text");
+const titleHolder = document.getElementById("title-holder");
+const submitButton = document.getElementById("submit-button");
+
+const decrementer = document.getElementById("decrementer");
+const incrementer = document.getElementById("incrementer");
+
 let monthData = [];
 let selectedDate = new Date();
+let initial = true;
 
 async function doMainBuild(doFetch) {
+    if (initial) {
+        assignColorIncrementer(decrementer);
+        assignColorIncrementer(incrementer);
+        buildTitleHolder();
+        assignColor(submitButton);
+        initial = false;
+    }
     errorBox.hidden = true;
     dateField.value = getFormattedDate(selectedDate);
     dateText.innerText = getFormattedDate(selectedDate);
@@ -25,6 +40,9 @@ async function doMainBuild(doFetch) {
 
     let todayByYear = getTodayByYear();
     buildCards(todayByYear);
+
+
+
     console.log("Built cards");
 }
 
@@ -122,8 +140,9 @@ function buildCards(daily) {
 
         // Create the button to open the Google search
         const btn = document.createElement("button");
-        btn.className = "btn btn-primary";
+        assignColor(btn);
         btn.innerText = "What in the doodle?";
+        btn.onmouseenter = () => assignColor(btn);
 
         // Make the a tag link to new Google search
         const link = document.createElement("a");
@@ -154,6 +173,16 @@ function buildCards(daily) {
     }
 }
 
+function assignColorIncrementer(element) {
+    assignColor(element);
+    element.className = element.className + " btn btn-primary rounded-circle";
+}
+
+function assignColor(element) {
+    let color = getRandomColor();
+    element.className = color + " btn";
+}
+
 Date.prototype.addDays = function(days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
@@ -177,4 +206,23 @@ class Doodle {
         this.title = title;
         this.date = date;
     }
+}
+
+function getRandomColor() {
+    let colorIndex = Math.floor(Math.random() * 4);
+    let color = colors[colorIndex];
+    return color;
+}
+
+function buildTitleHolder() {
+    let title = "Today in Google Doodles History";
+
+    for (const letter of title) {
+        let span = document.createElement("span");
+        let color = getRandomColor();
+        span.className = color + "-letter";
+        span.innerText = letter;
+        titleHolder.append(span);
+    }
+
 }

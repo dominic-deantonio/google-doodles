@@ -12,17 +12,19 @@
 
 <body onload="doMainBuild(true);">
     <banner>
-        <h1>Today in Google Doodles History</h1>
+        <h1 id="title-holder">
+            <!-- Filled by JS -->
+        </h1>
     </banner>
     <div id="date-adjuster">
         <div id="date-incrementer">
-            <button onclick="incrementDate(-1);" class="btn btn-primary rounded-circle incrementer-button">&lt</button>
+            <button onmouseenter="assignColorIncrementer(this)" id="decrementer" onclick="incrementDate(-1);" class="btn btn-primary rounded-circle incrementer-button">&lt</button>
             <h2 id="date-text" onmouseenter="switchToTextInput();"></h2>
-            <button onclick="incrementDate(1);" class="btn btn-primary rounded-circle incrementer-button">&gt</button>
+            <button onmouseenter="assignColorIncrementer(this)" id="incrementer" onclick="incrementDate(1);" class="btn btn-primary rounded-circle incrementer-button">&gt</button>
         </div>
         <div id="date-field-container" onmouseleave="switchToIncrementer();" hidden>
             <input id="date-field" type="text">
-            <button onclick="buildWithDateField();" class="btn btn-primary">Get Doodles</button>
+            <button id="submit-button" onmouseenter="assignColor(this)" onclick="buildWithDateField();" class="btn btn-primary">Get Doodles</button>
         </div>
     </div>
     <div id="error-text" class="alert alert-danger container" hidden>Invalid date</div>
