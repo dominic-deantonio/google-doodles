@@ -22,13 +22,13 @@
         </div>
         <div id="date-field-container" onmouseleave="switchToIncrementer();" hidden>
             <input id="date-field" type="text">
-            <button class="btn btn-primary">Get Doodles</button>
+            <button onclick="buildWithDateField();" class="btn btn-primary">Get Doodles</button>
         </div>
-
     </div>
-    <div class="container">Invalid date</div>
+    <div id="error-text" class="alert alert-danger container" hidden>Invalid date</div>
+    <img id="loader" src="https://miro.medium.com/max/1400/1*CsJ05WEGfunYMLGfsT2sXA.gif" alt="">
     <div id="doodle-container" class="container doodle-container">
-
+        <!-- this gets filled by js -->
     </div>
     <script src="./main.js"></script>
 </body>

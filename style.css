@@ -75,5 +75,17 @@ h1 {
 }
 
 .doodle-img {
-    max-height: 170px;
+    max-height: 140px;
+}
+
+#error-text {
+    display: flex;
+    justify-content: center;
+    width: 20%;
+}
+
+#loader {
+    display: flex;
+    max-width: 700px;
+    align-self: center;
 }

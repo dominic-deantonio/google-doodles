@@ -1,25 +1,45 @@
 const URL = 'https://google-doodles.herokuapp.com/doodles/year/month?hl=en';
+const GOOGLE_HANDOFF = "https://www.google.com/search?q=query";
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+const loader = document.getElementById("loader");
 const dateFieldContainer = document.getElementById("date-field-container");
 const dateField = document.getElementById("date-field");
 const dateText = document.getElementById("date-text");
 const dateIncrementer = document.getElementById("date-incrementer");
 const years = getYears();
 const doodleContainer = document.getElementById("doodle-container");
+const errorBox = document.getElementById("error-text");
 let monthData = [];
 let selectedDate = new Date();
 
 async function doMainBuild(doFetch) {
-
-    dateField.value = getFormattedDate();
-    dateText.innerText = getFormattedDate();
-    if (doFetch)
+    errorBox.hidden = true;
+    dateField.value = getFormattedDate(selectedDate);
+    dateText.innerText = getFormattedDate(selectedDate);
+    if (doFetch) {
+        showPlaceholder(true);
         monthData = await fetchMonthly();
+        showPlaceholder(false);
+    }
 
     let todayByYear = getTodayByYear();
     buildCards(todayByYear);
-    console.log("Initialized app");
+    console.log("Built cards");
+}
+
+async function buildWithDateField() {
+
+    console.log(dateField.value);
+    let date = new Date(Date.parse(dateField.value));
+    if (isNaN(date)) {
+        errorBox.hidden = false;
+        return;
+    }
+    let previousMonth = selectedDate.getMonth();
+    selectedDate = date;
+    let shouldFetch = previousMonth != selectedDate.getMonth();
+    doMainBuild(shouldFetch);
 }
 
 async function incrementDate(amount) {
@@ -91,29 +111,40 @@ function buildCards(daily) {
     doodleContainer.innerHTML = "";
     for (const json of daily) {
 
+        // The json doodle title
         const title = document.createElement("span");
         title.innerText = json.title;
 
+        // Get the date element 
         const dateElement = document.createElement("span");
-        const date = new Date(json.run_date_array[0], json.run_date_array[1], json.run_date_array[2], );
+        const date = new Date(json.run_date_array[0], json.run_date_array[1], json.run_date_array[2]);
         dateElement.innerText = getFormattedDate(date);
 
+        // Create the button to open the Google search
         const btn = document.createElement("button");
         btn.className = "btn btn-primary";
         btn.innerText = "What in the doodle?";
 
+        // Make the a tag link to new Google search
+        const link = document.createElement("a");
+        link.href = GOOGLE_HANDOFF.replace("query", json.title);
+        link.append(btn);
+        link.target = "_blank"; // Force new tab
+
+        // The title, date, and link button as one object
         const textAndButton = document.createElement("div");
         textAndButton.className = "doodle-text-and-button";
-
         textAndButton.append(title);
         textAndButton.append(dateElement);
         textAndButton.append(document.createElement("br"));
-        textAndButton.append(btn);
+        textAndButton.append(link);
 
+        // Create the image
         const image = document.createElement("img");
         image.className = "doodle-img";
         image.src = json.url;
 
+        // The overall card has two objects only, allowing easy spacing
         const doodleCard = document.createElement("div");
         doodleCard.className = "card doodle";
         doodleCard.append(image);
@@ -129,8 +160,15 @@ Date.prototype.addDays = function(days) {
     return date;
 }
 
-function getFormattedDate() {
-    return months[selectedDate.getMonth()] + " " + selectedDate.getDate() + ", " + selectedDate.getFullYear();
+function getFormattedDate(date) {
+    return months[selectedDate.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+}
+
+function showPlaceholder(shouldShow) {
+    if (shouldShow) {
+        doodleContainer.innerHTML = "";
+    }
+    loader.hidden = !shouldShow;
 }
 
 class Doodle {
