@@ -200,14 +200,6 @@ function showPlaceholder(shouldShow) {
     loader.hidden = !shouldShow;
 }
 
-class Doodle {
-    constructor(imgUrl, title, date) {
-        this.imgUrl = imgUrl;
-        this.title = title;
-        this.date = date;
-    }
-}
-
 function getRandomColor() {
     let colorIndex = Math.floor(Math.random() * 4);
     let color = colors[colorIndex];
